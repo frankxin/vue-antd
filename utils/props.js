@@ -1,18 +1,29 @@
 const toString = Object.prototype.toString
 
 // 返回vue匹配的props的对象
+// 此函数用来强制props验证
 export function defaultProps (props) {
   for (const i in props) {
     if (props.hasOwnProperty(i)) {
       let defaultValue = props[i]
 
       // 支持String， Number等类型
+      // String Number Boolean Function Object Array
+      /**
+       * Here goes:
+       *  defaultProps({
+       *    date: String,
+       *    onclick: () => {}
+       *  })
+       *  defaultValue.name = String/Function (This is string type)
+       *  So . window[defaultValue.name] is the constructor of basic type
+       */
+    
       if (defaultValue && defaultValue.name && window[defaultValue.name] === defaultValue) {
         props[i] = {
           type: defaultValue,
           default: null
         }
-
         continue
       }
 
